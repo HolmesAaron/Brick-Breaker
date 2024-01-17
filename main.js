@@ -1,4 +1,4 @@
-// Brick Breaker
+// Brick Breaker Mini
 
 // Canvas
 let cnv = document.getElementById("myCanvas");
@@ -7,8 +7,11 @@ cnv.width = 800;
 cnv.height = 1000;
 
 // Variables
+let brickHeight, brickWidth, brickX, brickY;
 let paddleWidth = 150;
 let paddleX = cnv.width / 2 - paddleWidth / 2;
+let paddleMid;
+let ballAngle;
 let ADown, DDown, WDown;
 let ArrowL, ArrowR, ArrowU;
 let moveRight = false;
@@ -16,6 +19,8 @@ let moveLeft = false;
 let ballX, ballY;
 let ballXS, ballYS;
 let ballRad = 15;
+let score = 0;
+let highScore = 0;
 let state = "gameStart";
 
 reset();
@@ -39,7 +44,6 @@ function draw() {
   ) {
     state = "gamePlay";
   }
-
   requestAnimationFrame(draw);
 }
 
