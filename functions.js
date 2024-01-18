@@ -1,5 +1,11 @@
 function gameStart() {
   reset();
+  drawStartText();
+}
+function drawStartText() {
+  ctx.font = "40px Consolas";
+  ctx.fillStyle = "white";
+  ctx.fillText("PRESS UP TO START", 210, 35);
 }
 
 function gamePlay() {
@@ -79,13 +85,12 @@ function brickCollide() {
 }
 
 function ballHandler() {
-  moveBall();
-  ballBounce();
-}
-function moveBall() {
+  // Move ball
   ballX -= ballXS;
   ballY -= ballYS;
+  ballBounce();
 }
+
 function ballBounce() {
   wallBounce();
   paddleBounce();
@@ -103,7 +108,8 @@ function wallBounce() {
     ballY = ballRad;
     ballYS = -ballYS;
   }
-  if (ballY + ballRad >= cnv.height) {
+  if (ballY + ballRad + 3 >= cnv.height) {
+    ballY = cnv.height - ballRad;
     state = "gameOver";
   }
 }
@@ -117,14 +123,53 @@ function paddleBounce() {
     (ballY + ballRad < cnv.height - 130) &
     (ballY + ballRad > cnv.height - 150)
   ) {
-    if ((ballAngle < 15) & (ballAngle > -15)) {
+    if ((ballAngle < 2.5) & (ballAngle > -2.5)) {
       ballXS = 0;
       ballYS = 8;
-    } //else if (ballAngle > 15 & ballAngle < 30)
+    } else if ((ballAngle > 2.5) & (ballAngle < 13)) {
+      ballXS = 1;
+      ballYS = 8;
+    } else if ((ballAngle < -2.5) & (ballAngle > -13)) {
+      ballXS = -1;
+      ballYS = 8;
+    } else if ((ballAngle > 13) & (ballAngle < 25)) {
+      ballXS = 3;
+      ballYS = 8;
+    } else if ((ballAngle < -13) & (ballAngle > -25)) {
+      ballXS = -3;
+      ballYS = 8;
+    } else if ((ballAngle > 25) & (ballAngle < 40)) {
+      ballXS = 4;
+      ballYS = 8;
+    } else if ((ballAngle < -25) & (ballAngle > -40)) {
+      ballXS = -4;
+      ballYS = 8;
+    } else if ((ballAngle > 40) & (ballAngle < 75)) {
+      ballXS = 6;
+      ballYS = 7;
+    } else if ((ballAngle < -40) & (ballAngle > -75)) {
+      ballXS = -6;
+      ballYS = 7;
+    } else if ((ballAngle > 75) & (ballAngle < 90)) {
+      ballXS = 8;
+      ballYS = 6.5;
+    } else if ((ballAngle < -75) & (ballAngle > -90)) {
+      ballXS = -8;
+      ballYS = 6.5;
+    }
   }
 }
 
 function gameOver() {
+  failText();
+  setTimeout(stateStart, 1500);
+}
+function failText() {
+  ctx.font = "50px Consolas";
+  ctx.fillStyle = "white";
+  ctx.fillText(`YOU FAILED`, 270, cnv.height / 4);
+}
+function stateStart() {
   state = "gameStart";
 }
 
@@ -133,7 +178,7 @@ function reset() {
   paddleX = cnv.width / 2 - paddleWidth / 2;
   ballX = cnv.width / 2;
   ballY = cnv.height - 200;
-  ballXS = 1;
+  ballXS = 0;
   ballYS = 8;
   score = 0;
   brick1X = 125;
@@ -167,6 +212,12 @@ function drawGeneral() {
   ctx.fillRect(brick1X, brick1Y, brick1Width, brick1Height);
   ctx.fillRect(brick2X, brick2Y, brick2Width, brick2Height);
   ctx.fillRect(brick3X, brick3Y, brick3Width, brick3Height);
+
+  // Draw text
+  ctx.font = "30px Consolas";
+  ctx.fillStyle = "white";
+  ctx.fillText(`SCORE: ${score}`, 25, cnv.height - 15);
+  ctx.fillText(`HIGH SCORE: ${highScore}`, cnv.width - 250, cnv.height - 15);
 }
 
 function scoreUpdate() {
